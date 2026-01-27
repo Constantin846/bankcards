@@ -1,0 +1,29 @@
+services:
+  bankcards-service:
+    build: .
+    image: bankcards-service:v1
+    container_name: bankcards-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - bankcards-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://bankcards-db:5432/bankcards
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pass
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
+
+  bankcards-db:
+    image: postgres:17
+    container_name: postgres-bankcards-db # docker-compose up -d bankcards-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=user
+      - POSTGRES_DB=bankcards
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
