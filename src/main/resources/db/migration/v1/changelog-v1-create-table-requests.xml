@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="v1-3" author="Author">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="requests"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="requests">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="owner_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bank_card_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_date_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="v1-3-fk" author="Author">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_requests_users"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="requests" baseColumnNames="owner_id"
+                                 constraintName="fk_requests_users"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+    </changeSet>
+
+    <changeSet id="v1-3-fk-2" author="Author">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_requests_bank_cards"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="requests" baseColumnNames="bank_card_id"
+                                 constraintName="fk_requests_bank_cards"
+                                 referencedTableName="bank_cards" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+    </changeSet>
+
+</databaseChangeLog>

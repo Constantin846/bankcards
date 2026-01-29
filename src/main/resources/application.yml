@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/bankcards
+    username: user
+    password: ${DB_PASSWORD:pass}
+
+  liquibase:
+    change-log: classpath:/db/migration/changelog-main.xml
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
+app:
+  controller:
+    base-path: '/api/v1'
+    h2-path: '/h2-console/**'
+    users-path: '/users'
+    registration-path: '/registration'
+    bank-cards-path: '/bank-cards'
+    requests-path: '/requests'
+    admin-access: '/admin'
+    user-access: '/user'
+    
+    access-rules:
+      public-endpoints:
+        - '/error/**'
+        - '/swagger-ui.html'
+        - '/swagger-ui/**'
+        - '/v3/api-docs/**'
+        - '${app.controller.h2-path}'
+      user-endpoints:
+        - '${app.controller.base-path}${app.controller.users-path}${app.controller.user-access}/**'
+        - '${app.controller.base-path}${app.controller.bank-cards-path}${app.controller.user-access}/**'
+        - '${app.controller.base-path}${app.controller.requests-path}${app.controller.user-access}/**'
+      admin-endpoints:
+        - '${app.controller.base-path}${app.controller.registration-path}/**'
+        - '${app.controller.base-path}${app.controller.users-path}${app.controller.admin-access}/**'
+        - '${app.controller.base-path}${app.controller.bank-cards-path}${app.controller.admin-access}/**'
+
+  admin:
+    name-email: 'admin'
+    password: 'admin'
