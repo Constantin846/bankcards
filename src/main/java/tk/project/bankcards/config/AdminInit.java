@@ -16,23 +16,23 @@ import tk.project.bankcards.repository.UserRepository;
 @ConditionalOnProperty(prefix = "app.admin-init", name = "enabled", matchIfMissing = true)
 public class AdminInit {
 
+  private final AdminConfig adminConfig;
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
 
   @PostConstruct
   public void registerAdmin() {
-    String email = "admin";
 
-    if (userRepository.findByEmail(email).isPresent()) {
+    if (userRepository.findByEmail(adminConfig.getNameEmail()).isPresent()) {
       log.info("Админ уже был зарегистрирован");
       return;
     }
 
     UserEntity admin =
         UserEntity.builder()
-            .name("admin")
-            .password(passwordEncoder.encode("admin"))
-            .email(email)
+            .name(adminConfig.getNameEmail())
+            .password(passwordEncoder.encode(adminConfig.getPassword()))
+            .email(adminConfig.getNameEmail())
             .role(Role.ADMIN)
             .build();
 

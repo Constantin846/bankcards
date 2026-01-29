@@ -10,11 +10,7 @@ import java.util.UUID;
 
 @Schema(description = "DTO для запроса на перевод средств между картами")
 public record TransferDto(
-    @NotNull
-        @Schema(description = "Id карты отправления", requiredMode = REQUIRED)
-        UUID fromCardId,
-    @NotNull
-        @Schema(description = "Id карты получения", requiredMode = REQUIRED)
-        UUID toCardId,
+    @NotNull @Schema(description = "Id карты отправления", requiredMode = REQUIRED) UUID fromCardId,
+    @NotNull @Schema(description = "Id карты получения", requiredMode = REQUIRED) UUID toCardId,
     @NotNull @Positive @Schema(description = "Сумма перевода", requiredMode = REQUIRED)
         BigDecimal amount) {}
